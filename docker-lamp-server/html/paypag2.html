@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+        <meta charset="UTF-8">
+        <title>metamask-payment-example</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        
+        <div>
+            <div class="btext">
+                <a href="#" class="btneth">Donate with MetaMask</a>
+            <div class="message"></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        
+        <script>
+
+            var tipButton = document.querySelector('.btneth')
+        
+            tipButton.addEventListener('click', async function() 
+                {
+                if (typeof web3 === 'undefined') 
+                    {
+                    return renderMessage('<div>You need to install <a href=“https://metmask.io“>MetaMask </a> to use this feature.  <a href=“https://metmask.io“>https://metamask.io</a></div>')
+                    }
+        
+                
+                web3 = new Web3(window.ethereum)
+                    window.ethereum.enable().catch(error => {
+                console.log(error)
+                })
+                
+                var user_address = await web3.eth.getAccounts()
+                console.log(user_address[0])
+        
+                web3.eth.sendTransaction(
+                    {
+                    to: '0x274b35a273040Ca0D1C98d3b926a82Fc148FFC75',
+                    from: user_address[0],
+                    value:  "1000000000000000",
+                    data: "0xdf"
+                    }, 
+                    function (err, transactionHash) 
+                        {
+                        if (err) {return renderMessage('There was a problem!: ' + err.message)}
+                            else{
+                        renderMessage('Thanks for the generosity!!');
+                    }
+                    })
+                })
+        
+            function renderMessage (message) 
+                {
+                var messageEl = document.querySelector('.message')
+                messageEl.innerHTML = message
+                }
+        
+        </script>
+
+    </body>
+</html>
